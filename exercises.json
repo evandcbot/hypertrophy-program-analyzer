@@ -1,0 +1,203 @@
+
+[
+    {
+            "name": "Incline Bench Press",
+            "muscle": "Chest",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 8,
+            "weight": 75
+        },
+        {
+            "name": "Cable Lateral Raise",
+            "muscle": "Shoulders",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 6,
+            "weight": 15
+        },
+        {
+            "name": "Wide-Grip Lat Pulldown",
+            "muscle": "Back",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 8,
+            "weight": 100
+        },
+        {
+            "name": "High-to-Low Cable Fly",
+            "muscle": "Chest",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Seated Cable Row",
+            "muscle": "Back",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Incline Dumbbell Curl",
+            "muscle": "Biceps",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Single-Arm Tricep Extension",
+            "muscle": "Triceps",
+            "day": "Monday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Hack Squat",
+            "muscle": "Quads",
+            "day": "Tuesday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Seated Hamstring Curl",
+            "muscle": "Hamstrings",
+            "day": "Tuesday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Leg Extension",
+            "muscle": "Quads",
+            "day": "Tuesday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Standing Calf Raise",
+            "muscle": "Calves",
+            "day": "Tuesday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Hip Abduction Machine",
+            "muscle": "Glutes",
+            "day": "Tuesday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Back Extension",
+            "muscle": "Lower Back",
+            "day": "Tuesday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Pec Deck",
+            "muscle": "Chest",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Low-to-High Cable Fly",
+            "muscle": "Chest",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Cable Rear Delt Fly",
+            "muscle": "Rear Delts",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Preacher Curl",
+            "muscle": "Biceps",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Reverse Cable Curl",
+            "muscle": "Forearms",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Machine Dips",
+            "muscle": "Triceps",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Hammer Curl",
+            "muscle": "Biceps",
+            "day": "Thursday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Stiff-Leg Deadlift",
+            "muscle": "Hamstrings",
+            "day": "Friday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Bulgarian Split Squat",
+            "muscle": "Quads",
+            "day": "Friday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Hamstring Curl",
+            "muscle": "Hamstrings",
+            "day": "Friday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Leg Extension",
+            "muscle": "Quads",
+            "day": "Friday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        },
+        {
+            "name": "Hip Adduction Machine",
+            "muscle": "Adductors",
+            "day": "Friday",
+            "sets": 2,
+            "reps": 10,
+            "weight": 100
+        }
+    ]
