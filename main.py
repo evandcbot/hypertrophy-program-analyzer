@@ -286,9 +286,9 @@ def workout_summary(muscle_sets, muscle_days):
         print(f'{muscle}: {sets} sets across {days} days ')
 
 def add_exercise(exercises):
-    name = input("Exercise name: ").capitalize
-    muscle = input("Muscle worked: ").capitalize
-    days = input(("Day(s) worked, separated by commas: ").split(",")).capitalize
+    name = input("Exercise name: ").capitalize()
+    muscle = input("Muscle worked: ").capitalize()
+    days = input("Day(s) worked, separated by commas: ").split(",")
     while True:
         try:
             sets = int(input("Sets done: "))
@@ -318,7 +318,7 @@ def add_exercise(exercises):
             print("Weight must be a whole number")
 
     for day in days:
-        day = day.strip()
+        day = day.strip().capitalize()
         new_exercise = {
             "name": name,
             "muscle": muscle,
