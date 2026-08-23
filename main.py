@@ -215,26 +215,149 @@ exercises = [
     }
 ]
 
-for exercise in exercises:
-    print(f"{exercise['name']}, {exercise['muscle']}: {exercise['sets']} sets of {exercise['reps']} reps at {exercise['weight']} lbs")
-
-muscle_sets = {}
-for exercise in exercises:
-    muscle = exercise["muscle"]
-    if muscle not in muscle_sets:
-        muscle_sets[muscle] = 0
-    muscle_sets[muscle] += exercise["sets"]
-
-muscle_days = {}
-
-for exercise in exercises:
-    muscle = exercise["muscle"]
-    day = exercise["day"]
-    if muscle not in muscle_days:
-        muscle_days[muscle] = set()
-    muscle_days[muscle].add(day)
+#calculates how many sets per week each muscle group gets worked
+def calculate_muscle_sets(exercises):
+    muscle_sets = {}
+    for exercise in exercises:
+        muscle = exercise["muscle"]
+        if muscle not in muscle_sets:
+            muscle_sets[muscle] = 0
+        muscle_sets[muscle] += exercise["sets"]
+    return muscle_sets
 
 
 
-for muscle in muscle_sets:
-    print(f"{muscle}: {muscle_sets[muscle]} sets over {len(muscle_days[muscle])} days")
+#calculates what day each muscle is exercised
+def calculate_muscle_days(exercises):
+    muscle_days = {}
+
+    for exercise in exercises:
+        muscle = exercise["muscle"]
+        day = exercise["day"]
+        if muscle not in muscle_days:
+            muscle_days[muscle] = set()
+        muscle_days[muscle].add(day)
+    return muscle_days
+
+
+#calculates ALL of the muscles hit each day
+def calculate_day_muscles(exercises):
+    day_muscles = {}
+
+    for exercise in exercises:
+        muscle = exercise["muscle"]
+        day = exercise["day"]
+        if day not in day_muscles:
+            day_muscles[day] = set()
+        day_muscles[day].add(muscle)
+    return day_muscles
+
+day_muscles = calculate_day_muscles(exercises)
+#print(day_muscles)
+
+#organizes above information into one easily readable section
+def organize_workout_day(exercises):
+    workout_day = {}
+    for exercise in exercises:
+        day = exercise["day"]
+        if day not in workout_day:
+            workout_day[day] = []
+        workout_day[day].append(exercise)
+    return workout_day
+
+def display_workout(workout_day):
+    for key in workout_day:
+        print(f'{key}:\n')
+        for exercise in workout_day[key]:
+            name = exercise["name"]
+            sets = exercise["sets"]
+            reps = exercise["reps"]
+            weight = exercise["weight"]
+            print(f'{name}: {sets} sets of {reps} reps at {weight} lbs')
+        print()
+
+#prints weekly workout summary
+
+def workout_summary(muscle_sets, muscle_days):
+    print(f'WEEKLY WORKOUT SUMMARY:\n')
+    for muscle in muscle_sets:
+        sets = muscle_sets[muscle]
+        days = len(muscle_days[muscle])
+        print(f'{muscle}: {sets} sets across {days} days ')
+
+def add_exercise(exercises):
+    name = input("Exercise name: ").capitalize
+    muscle = input("Muscle worked: ").capitalize
+    days = input(("Day(s) worked, separated by commas: ").split(",")).capitalize
+    while True:
+        try:
+            sets = int(input("Sets done: "))
+            if sets <= 0:
+                print("Sets must be greater than 0")
+            else:
+                break
+        except ValueError:
+            print("Sets must be a whole number")
+    while True:
+        try:
+            reps = int(input("Reps worked: "))
+            if reps <= 0:
+                print("Reps must be greater than 0")
+            else:
+                break
+        except ValueError:
+            print("Reps must be a whole number")
+    while True:
+        try:
+            weight = int(input("Weighted lifted: "))
+            if weight <= 0:
+                print("Weight must be greater than 0")
+            else:
+                break
+        except ValueError:
+            print("Weight must be a whole number")
+
+    for day in days:
+        day = day.strip()
+        new_exercise = {
+            "name": name,
+            "muscle": muscle,
+            "day": day,
+            "sets": sets,
+            "reps": reps,
+            "weight": weight
+        }
+        exercises.append(new_exercise)
+        print(f'{new_exercise} added succesfully')
+
+
+def view_workout(exercises):
+    workout_day = organize_workout_day(exercises)
+    display_workout(workout_day)
+
+def view_summary(exercises):
+    muscle_sets = calculate_muscle_sets(exercises)
+    muscle_days = calculate_muscle_days(exercises)
+    workout_summary(muscle_sets, muscle_days)
+
+while True:
+    print("HYPERTROPHY TRAINING PROGRAM")
+    print()
+    print("1. View workout")
+    print("2. View weekly muscle summary")
+    print("3. Add exercise")
+    print("4. Exit")
+
+    choice = input("choose option: ")
+    if choice == "1":
+        view_workout(exercises)
+    elif choice == "2":
+        view_summary(exercises)
+    elif choice == "3":
+        input("Please fill in the following information (press 'Enter' to continue): ")
+        add_exercise(exercises)
+    elif choice == "4":
+        print("Program Closed")
+        break
+    else:
+        print("Error: Invalid option")
