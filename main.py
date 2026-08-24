@@ -4,10 +4,21 @@ from pathlib import Path
 project_folder = Path(__file__).parent
 exercise_file = project_folder / 'exercises.json'
 
-with open(exercise_file, 'r') as file:
-    exercises = json.load(file)
-
-
+def load_exercises():
+    try:
+        with open(exercise_file, 'r') as file:
+            exercises = json.load(file)
+        if isinstance(exercises, list):
+            return exercises
+        else:
+            print("Error: json not in list format")
+            return []
+    except FileNotFoundError:
+        print("File doesnt exist, exercises = empty")
+        return []
+    except json.JSONDecodeError:
+        print("Invalid Json")
+        return []
 #calculates how many sets per week each muscle group gets worked
 def calculate_muscle_sets(exercises):
     muscle_sets = {}
@@ -45,8 +56,6 @@ def calculate_day_muscles(exercises):
         day_muscles[day].add(muscle)
     return day_muscles
 
-day_muscles = calculate_day_muscles(exercises)
-#print(day_muscles)
 
 #organizes above information into one easily readable section
 def organize_workout_day(exercises):
@@ -139,24 +148,49 @@ def save_exercises(exercises):
     with open(exercise_file, "w") as file:
         json.dump(exercises, file, indent=4)
 
-while True:
-    print("HYPERTROPHY TRAINING PROGRAM")
-    print()
-    print("1. View workout")
-    print("2. View weekly muscle summary")
-    print("3. Add exercise")
-    print("4. Exit")
+def delete_exercises(exercises):
+    for number, exercise in enumerate(exercises, start=1):
+        print(number, exercise["name"], exercise["day"])
 
-    choice = input("choose option: ")
-    if choice == "1":
-        view_workout(exercises)
-    elif choice == "2":
-        view_summary(exercises)
-    elif choice == "3":
-        input("Please fill in the following information (press 'Enter' to continue): ")
-        add_exercise(exercises)
-    elif choice == "4":
-        print("Program Closed")
-        break
-    else:
-        print("Error: Invalid option")
+    while True:
+        try:
+            choice = int(input("Pick a number: "))
+            if choice < 0 or choice > len(exercises):
+                print("invalid option: must choose a number")
+                continue
+            exercises.pop(choice - 1)
+            save_exercises(exercises)
+            print("Exercise deleted successfully!")
+            break
+        except ValueError:
+            print("Error, Must be a number")
+
+def main():
+    exercises = load_exercises()
+    while True:
+        print("HYPERTROPHY TRAINING PROGRAM")
+        print()
+        print("1. View workout")
+        print("2. View weekly muscle summary")
+        print("3. Add exercise")
+        print("4. Delete exercise")
+        print("5. Exit")
+
+        choice = input("choose option: ")
+        if choice == "1":
+            view_workout(exercises)
+        elif choice == "2":
+            view_summary(exercises)
+        elif choice == "3":
+            input("Please fill in the following information (press 'Enter' to continue): ")
+            add_exercise(exercises)
+        elif choice == "4":
+            delete_exercises(exercises)
+        elif choice == "5":
+            print("Program Closed")
+            break
+        else:
+            print("Error: Invalid option")
+
+if __name__ == "__main__":
+    main()
