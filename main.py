@@ -1,6 +1,10 @@
 import json
+from pathlib import Path
 
-with open('exercises.json', 'r') as file:
+project_folder = Path(__file__).parent
+exercise_file = project_folder / 'exercises.json'
+
+with open(exercise_file, 'r') as file:
     exercises = json.load(file)
 
 
@@ -119,6 +123,8 @@ def add_exercise(exercises):
         exercises.append(new_exercise)
         print(f'{new_exercise} added succesfully')
 
+    save_exercises(exercises)
+
 
 def view_workout(exercises):
     workout_day = organize_workout_day(exercises)
@@ -128,6 +134,10 @@ def view_summary(exercises):
     muscle_sets = calculate_muscle_sets(exercises)
     muscle_days = calculate_muscle_days(exercises)
     workout_summary(muscle_sets, muscle_days)
+
+def save_exercises(exercises):
+    with open(exercise_file, "w") as file:
+        json.dump(exercises, file, indent=4)
 
 while True:
     print("HYPERTROPHY TRAINING PROGRAM")
