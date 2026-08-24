@@ -198,5 +198,13 @@
         "sets": 2,
         "reps": 10,
         "weight": 100
+    },
+    {
+        "name": "T bar row",
+        "muscle": "Back",
+        "day": "Thursday",
+        "sets": 2,
+        "reps": 10,
+        "weight": 115
     }
 ]

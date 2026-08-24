@@ -155,12 +155,18 @@ def delete_exercises(exercises):
     while True:
         try:
             choice = int(input("Pick a number: "))
-            if choice < 0 or choice > len(exercises):
-                print("invalid option: must choose a number")
+            if choice < 1 or choice > len(exercises):
+                print("invalid option: must choose a numbered exercise")
                 continue
-            exercises.pop(choice - 1)
-            save_exercises(exercises)
-            print("Exercise deleted successfully!")
+            exercise = exercises[choice - 1]
+            print(f'Are you sure you wish to delete {exercise["name"]} from your schedule on {exercise["day"]}?')
+            confirmation = input("yes/no: ")
+            if confirmation.lower() == "yes":
+                exercises.pop(choice - 1)
+                save_exercises(exercises)
+                print("Exercise deleted successfully!")
+            else:
+                break
             break
         except ValueError:
             print("Error, Must be a number")
