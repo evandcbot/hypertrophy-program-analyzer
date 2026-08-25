@@ -165,11 +165,73 @@ def delete_exercises(exercises):
                 exercises.pop(choice - 1)
                 save_exercises(exercises)
                 print("Exercise deleted successfully!")
-            else:
+            elif confirmation.lower() == "no":
                 break
+            else:
+                print("Error: Invalid Option")
             break
         except ValueError:
-            print("Error, Must be a number")
+            print("Error: Must be a number")
+
+def edit_exercises(exercises):
+    if not exercises:
+        print("No exercises to edit")
+        return
+
+    for number, exercise in enumerate(exercises, start=1):
+        print(number, exercise["name"], exercise["day"])
+
+    while True:
+        try:
+            choice = int(input("Which exercise would you like to edit?: "))
+            if 1 <= choice <= len(exercises):
+                break
+            print("Invalid option: must choose a numbered exercise")
+        except ValueError:
+            print("Error: enter a valid exercise number")
+
+    exercise = exercises[choice - 1]
+    print("\nSelected exercise:")
+    editable_fields = ["name", "muscle", "day", "sets", "reps", "weight"]
+    for number, field in enumerate(editable_fields, start=1):
+        print(f"{number}. {field.capitalize()}: {exercise[field]}")
+
+    while True:
+        field_choice = input("Enter the field number or name to edit: ").strip().lower()
+        if field_choice.isdigit():
+            field_number = int(field_choice)
+            if 1 <= field_number <= len(editable_fields):
+                selected_field = editable_fields[field_number - 1]
+                break
+        elif field_choice in editable_fields:
+            selected_field = field_choice
+            break
+        print("Invalid option: choose a listed field")
+
+    while True:
+        new_value = input(f"Please type the new value for {selected_field}: ").strip()
+        if selected_field in ["sets", "reps", "weight"]:
+            try:
+                new_value = int(new_value)
+            except ValueError:
+                print("Error: enter a whole number")
+                continue
+            if new_value <= 0:
+                print("Value must be greater than 0")
+                continue
+        elif selected_field in ["name", "muscle", "day"]:
+            new_value = new_value.capitalize()
+        break
+
+    print(f'Are you sure you want to change {exercise["name"]} '
+          f'{selected_field} to {new_value}?')
+    confirmation = input("yes/no: ").strip().lower()
+    if confirmation == "yes":
+        exercise[selected_field] = new_value
+        save_exercises(exercises)
+        print("Exercise updated successfully!")
+    else:
+        print("Exercise was not changed")
 
 def main():
     exercises = load_exercises()
@@ -180,7 +242,8 @@ def main():
         print("2. View weekly muscle summary")
         print("3. Add exercise")
         print("4. Delete exercise")
-        print("5. Exit")
+        print("5. Edit exercise")
+        print("6. Exit")
 
         choice = input("choose option: ")
         if choice == "1":
@@ -193,6 +256,8 @@ def main():
         elif choice == "4":
             delete_exercises(exercises)
         elif choice == "5":
+            edit_exercises(exercises)
+        elif choice == "6":
             print("Program Closed")
             break
         else:
