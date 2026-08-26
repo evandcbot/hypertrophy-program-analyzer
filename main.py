@@ -19,6 +19,7 @@ def load_exercises():
     except json.JSONDecodeError:
         print("Invalid Json")
         return []
+
 #calculates how many sets per week each muscle group gets worked
 def calculate_muscle_sets(exercises):
     muscle_sets = {}
@@ -233,6 +234,67 @@ def edit_exercises(exercises):
     else:
         print("Exercise was not changed")
 
+def analyze_workout(exercises):
+    muscle_sets = calculate_muscle_sets(exercises)
+    muscle_days = calculate_muscle_days(exercises)
+
+    day_sets = {}
+    weekly_sets = 0
+    for exercise in exercises:
+        day = exercise["day"]
+        sets = exercise["sets"]
+        weekly_sets += sets
+        if day not in day_sets:
+            day_sets[day] = 0
+        day_sets[day] += sets
+    training_days = len(day_sets)
+    exercises_length = len(exercises)
+    avg_sets_per_day = weekly_sets / training_days
+    highest_volume_muscle = max(muscle_sets, key=muscle_sets.get)
+    lowest_volume_muscle = min(muscle_sets, key=muscle_sets.get)
+    busiest_day = max(day_sets, key=day_sets.get)
+
+    once_weekly = []
+    for muscle in muscle_days:
+        if len(muscle_days[muscle]) == 1:
+            once_weekly.append(muscle)
+    return {
+        "training_days": training_days,
+        "exercise_entries": exercises_length,
+        "weekly_sets": weekly_sets,
+        "average_sets_per_day": avg_sets_per_day,
+        "highest_volume_muscle": highest_volume_muscle,
+        "highest_volume_sets": muscle_sets[highest_volume_muscle],
+        "lowest_volume_muscle": lowest_volume_muscle,
+        "lowest_volume_sets": muscle_sets[lowest_volume_muscle],
+        "busiest_day": busiest_day,
+        "busiest_day_sets": day_sets[busiest_day],
+        "trained_once_weekly": once_weekly
+    }
+
+def display_analysis(analysis):
+    if analysis == None:
+        print("No Exercises Avalible")
+        return
+    print("\n PROGRAM ANALYSIS \n")
+    print(f'Training Days: {analysis["training_days"]}')
+    print(f'Exercise Entries: {analysis["exercise_entries"]}')
+    print(f'Weekly Sets: {analysis["weekly_sets"]}')
+    print(f'Average Sets Per Day: {analysis["average_sets_per_day"]}')
+    print(f'Highest Volume Muscle: {analysis["highest_volume_muscle"]} --- {analysis["highest_volume_sets"]}')
+    print(f'Lowest Volume Muscle: {analysis["lowest_volume_muscle"]} --- {analysis["lowest_volume_sets"]}')
+    print(f'Busiest Day: {analysis["busiest_day"]} --- {analysis["busiest_day_sets"]}')
+    print("Muscles Trained Once Weekly: ")
+    if analysis["trained_once_weekly"]:
+        for muscle in analysis["trained_once_weekly"]:
+            print(f'{muscle}')
+    else:
+        print(" - None")
+
+def view_analysis(exercises):
+    analysis = analyze_workout(exercises)
+    display_analysis(analysis)
+
 def main():
     exercises = load_exercises()
     while True:
@@ -243,7 +305,8 @@ def main():
         print("3. Add exercise")
         print("4. Delete exercise")
         print("5. Edit exercise")
-        print("6. Exit")
+        print("6. View Analysis")
+        print("7. Exit")
 
         choice = input("choose option: ")
         if choice == "1":
@@ -258,6 +321,8 @@ def main():
         elif choice == "5":
             edit_exercises(exercises)
         elif choice == "6":
+            view_analysis(exercises)
+        elif choice == "7":
             print("Program Closed")
             break
         else:
