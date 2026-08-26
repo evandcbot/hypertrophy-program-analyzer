@@ -11,13 +11,13 @@ def load_exercises():
         if isinstance(exercises, list):
             return exercises
         else:
-            print("Error: json not in list format")
+            print("Error: JSON data must be stored as a list.")
             return []
     except FileNotFoundError:
-        print("File doesnt exist, exercises = empty")
+        print("No exercises file found. Starting with an empty workout.")
         return []
     except json.JSONDecodeError:
-        print("Invalid Json")
+        print("Error: exercises.json contains invalid JSON.")
         return []
 
 #calculates how many sets per week each muscle group gets worked
@@ -43,20 +43,6 @@ def calculate_muscle_days(exercises):
             muscle_days[muscle] = set()
         muscle_days[muscle].add(day)
     return muscle_days
-
-
-#calculates ALL of the muscles hit each day
-def calculate_day_muscles(exercises):
-    day_muscles = {}
-
-    for exercise in exercises:
-        muscle = exercise["muscle"]
-        day = exercise["day"]
-        if day not in day_muscles:
-            day_muscles[day] = set()
-        day_muscles[day].add(muscle)
-    return day_muscles
-
 
 #organizes above information into one easily readable section
 def organize_workout_day(exercises):
@@ -89,8 +75,8 @@ def workout_summary(muscle_sets, muscle_days):
         print(f'{muscle}: {sets} sets across {days} days ')
 
 def add_exercise(exercises):
-    name = input("Exercise name: ").capitalize()
-    muscle = input("Muscle worked: ").capitalize()
+    name = input("Exercise name: ").strip()
+    muscle = input("Muscle worked: ").strip().title()
     days = input("Day(s) worked, separated by commas: ").split(",")
     while True:
         try:
@@ -112,7 +98,7 @@ def add_exercise(exercises):
             print("Reps must be a whole number")
     while True:
         try:
-            weight = int(input("Weighted lifted: "))
+            weight = int(input("Weight lifted: "))
             if weight <= 0:
                 print("Weight must be greater than 0")
             else:
@@ -121,7 +107,7 @@ def add_exercise(exercises):
             print("Weight must be a whole number")
 
     for day in days:
-        day = day.strip().capitalize()
+        day = day.strip().title()
         new_exercise = {
             "name": name,
             "muscle": muscle,
@@ -131,7 +117,7 @@ def add_exercise(exercises):
             "weight": weight
         }
         exercises.append(new_exercise)
-        print(f'{new_exercise} added succesfully')
+        print(f'{name} added to {day} succesfully!')
 
     save_exercises(exercises)
 
@@ -150,6 +136,9 @@ def save_exercises(exercises):
         json.dump(exercises, file, indent=4)
 
 def delete_exercises(exercises):
+    if not exercises:
+        print("No exercises to delete")
+        return
     for number, exercise in enumerate(exercises, start=1):
         print(number, exercise["name"], exercise["day"])
 
@@ -161,12 +150,12 @@ def delete_exercises(exercises):
                 continue
             exercise = exercises[choice - 1]
             print(f'Are you sure you wish to delete {exercise["name"]} from your schedule on {exercise["day"]}?')
-            confirmation = input("yes/no: ")
-            if confirmation.lower() == "yes":
+            confirmation = input("yes/no: ").strip().lower()
+            if confirmation == "yes":
                 exercises.pop(choice - 1)
                 save_exercises(exercises)
                 print("Exercise deleted successfully!")
-            elif confirmation.lower() == "no":
+            elif confirmation == "no":
                 break
             else:
                 print("Error: Invalid Option")
@@ -211,6 +200,9 @@ def edit_exercises(exercises):
 
     while True:
         new_value = input(f"Please type the new value for {selected_field}: ").strip()
+        if not new_value:
+            print("Value cannot be empty")
+            continue
         if selected_field in ["sets", "reps", "weight"]:
             try:
                 new_value = int(new_value)
@@ -220,8 +212,10 @@ def edit_exercises(exercises):
             if new_value <= 0:
                 print("Value must be greater than 0")
                 continue
-        elif selected_field in ["name", "muscle", "day"]:
-            new_value = new_value.capitalize()
+        elif selected_field == ["name"]:
+            pass
+        elif selected_field in ["muscle", "day"]:
+            new_value = new_value.title()
         break
 
     print(f'Are you sure you want to change {exercise["name"]} '
@@ -235,6 +229,8 @@ def edit_exercises(exercises):
         print("Exercise was not changed")
 
 def analyze_workout(exercises):
+    if not exercises:
+        return None
     muscle_sets = calculate_muscle_sets(exercises)
     muscle_days = calculate_muscle_days(exercises)
 
@@ -273,21 +269,21 @@ def analyze_workout(exercises):
     }
 
 def display_analysis(analysis):
-    if analysis == None:
-        print("No Exercises Avalible")
+    if analysis is None:
+        print("No exercises available.")
         return
     print("\n PROGRAM ANALYSIS \n")
     print(f'Training Days: {analysis["training_days"]}')
     print(f'Exercise Entries: {analysis["exercise_entries"]}')
     print(f'Weekly Sets: {analysis["weekly_sets"]}')
-    print(f'Average Sets Per Day: {analysis["average_sets_per_day"]}')
-    print(f'Highest Volume Muscle: {analysis["highest_volume_muscle"]} --- {analysis["highest_volume_sets"]}')
-    print(f'Lowest Volume Muscle: {analysis["lowest_volume_muscle"]} --- {analysis["lowest_volume_sets"]}')
-    print(f'Busiest Day: {analysis["busiest_day"]} --- {analysis["busiest_day_sets"]}')
+    print(f'Average Sets Per Day: {analysis["average_sets_per_day"]}:.1f')
+    print(f'Highest Volume Muscle: {analysis["highest_volume_muscle"]} --- {analysis["highest_volume_sets"]} sets')
+    print(f'Lowest Volume Muscle: {analysis["lowest_volume_muscle"]} --- {analysis["lowest_volume_sets"]} sets')
+    print(f'Busiest Day: {analysis["busiest_day"]} --- {analysis["busiest_day_sets"]} sets')
     print("Muscles Trained Once Weekly: ")
     if analysis["trained_once_weekly"]:
         for muscle in analysis["trained_once_weekly"]:
-            print(f'{muscle}')
+            print(f'- {muscle}')
     else:
         print(" - None")
 
@@ -305,10 +301,10 @@ def main():
         print("3. Add exercise")
         print("4. Delete exercise")
         print("5. Edit exercise")
-        print("6. View Analysis")
+        print("6. View program analysis")
         print("7. Exit")
 
-        choice = input("choose option: ")
+        choice = input("\nChoose an option: ").strip()
         if choice == "1":
             view_workout(exercises)
         elif choice == "2":
